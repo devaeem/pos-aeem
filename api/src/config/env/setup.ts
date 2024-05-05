@@ -7,5 +7,10 @@ dotenv.config({
 
 // the below code fragment can be found in:
 export const Yolo = {
-  port : process.env.PORT || 30002,
+  port : Number(process.env.PORT || 30002),
+  db: {
+    mongo: {
+      uri: String(process.env.MONGO_URI),
+    },
+  },
 }

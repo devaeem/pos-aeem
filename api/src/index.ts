@@ -1,9 +1,14 @@
 //express.js
-import express,{Response ,Request} from "express";
+import express from "express";
+import type {Response ,Request} from "express";
 import { Yolo } from "./config";
 import bodyParser from "body-parser";
 import morgan from "morgan";
 import cors from "cors";
+import router from "./root-routes";
+import { connectToDatabase } from "./config/mongo/mongo";
+import { globalErrorHanlder } from "./lib/core";
+
 
 const app = express();
 
@@ -12,13 +17,10 @@ app.use(cors());
 app.use(morgan("dev"));
 app.use(bodyParser.json({ limit: "50mb" }));
 
+connectToDatabase()
 
-
-app.get("/", (req:Request, res:Response) => {
-    res.json({
-      message: "Welcome to Yolo",
-    })
-});
+app.use("/api/v1/", router);
+app.use(globalErrorHanlder);
 
 const start = () => {
  app.listen(Yolo.port, () => {
